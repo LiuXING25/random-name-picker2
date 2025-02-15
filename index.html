@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>刘老师随机点名</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFB6C1, #FFD1DC);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: '微软雅黑';
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #FF69B4;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+            font-size: 2.8em;
+            margin: 20px 0;
+            letter-spacing: 3px;
+        }
+
+        #nameDisplay {
+            width: 80%;
+            height: 250px;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4em;
+            font-weight: 900;
+            box-shadow: 0 15px 30px rgba(255, 105, 180, 0.2);
+            color: #4A4A4A;
+            transition: all 0.3s;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        button {
+            padding: 18px 50px;
+            font-size: 1.5em;
+            background: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+        }
+
+        button:hover {
+            background: #FF1493;
+            transform: scale(1.05);
+        }
+
+        #speedControl {
+            width: 300px;
+            margin: 20px 0;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: #fff;
+            outline: none;
+        }
+
+        #speedControl::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #FF69B4;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .highlight {
+            color: #4169E1 !important;
+            text-shadow: 2px 2px 4px rgba(65, 105, 225, 0.3);
+            transform: scale(1.1);
+        }
+
+        .speed-label {
+            color: #FF69B4;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌸刘老师随机点名抽问🌸</h1>
+    <div id="nameDisplay">准备好咯~</div>
+    
+    <div class="controls">
+        <input type="range" id="speedControl" min="1" max="100" value="50">
+        <div class="speed-label">速度调节：左慢 ← → 右快</div>
+        <button id="startBtn">开始点名</button>
+    </div>
+
+    <script>
+        const names = [
+            "曹睿康", "曾浩宇", "曾思然", "曾子轩", "陈睿博", "陈欣妍",
+            "陈运", "戴彦晗", "邓源", "杜雅茹", "付浩鑫", "高嘉杰",
+            "郭奕鸣", "贺帅", "胡妙宜", "黄宸宇", "旷宇杰", "李艾黛",
+            "李格", "李嘉航", "李嘉睿", "李嘉彧", "李诗晗", "李毅轩",
+            "梁宇凡", "廖慧琦", "刘楚恬", "刘书源", "刘双琴", "刘思博",
+            "刘思彤", "龙俊宇", "罗昊", "聂宇涵", "邱子燃", "谭嘉轩",
+            "王君豪", "王钰洁", "吴佳慧", "肖安澜", "肖嘉坤", "肖丽媛",
+            "肖语萌", "谢林岳", "谢沛莹", "谢欣妍", "荀子轩", "严一鸣",
+            "颜诗涵", "颜梓媛", "阳锦瑞", "袁山泉", "钟孟希", "钟政真",
+            "周嘉彤", "周梓豪", "朱瑾怡", "朱俊宇", "邹萱怡", "陈淑颖",
+            "康伟鼎", "杨梓乐"
+        ];
+
+        let isRunning = false;
+        let intervalId;
+        const nameDisplay = document.getElementById('nameDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const speedControl = document.getElementById('speedControl');
+
+        function getRandomName() {
+            return names[Math.floor(Math.random() * names.length)];
+        }
+
+        function updateSpeed() {
+            return 100 - speedControl.value;
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!isRunning) {
+                isRunning = true;
+                startBtn.textContent = '暂停抽选';
+                nameDisplay.classList.remove('highlight');
+                
+                intervalId = setInterval(() => {
+                    nameDisplay.textContent = getRandomName();
+                }, updateSpeed());
+            } else {
+                isRunning = false;
+                startBtn.textContent = '开始点名';
+                clearInterval(intervalId);
+                nameDisplay.classList.add('highlight');
+            }
+        });
+
+        speedControl.addEventListener('input', () => {
+            if (isRunning) {
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    nameDisplay.textContent = getRandomName();
+                }, updateSpeed());
+            }
+        });
+    </script>
+</body>
+</html>
